@@ -3,8 +3,9 @@
 {% block body %}
     <h1>Mempool Recommended Fees</h1>
     <h2><label id="time"></label></h2>
+    <div id="chart_fees"></div>
     <h3>
-        <table>
+        <table id="fees">
         </table>
     </h3>
     <script>
@@ -46,6 +47,8 @@
                     }
                     document.querySelector('table').innerHTML = document.querySelector('table').innerHTML + tableData;
 
+                    drawBasic();
+
                 })
             }, 15000);
  
@@ -55,5 +58,67 @@
             document.getElementById("time").innerHTML = d.toLocaleTimeString();
         }
     
-    </script>       
+    </script>     
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        //google.charts.setOnLoadCallback(drawBasic);
+        
+        function drawBasic() {
+            console.log("Pintamos gráfica");
+
+            
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Fastest');
+            data.addColumn('number', 'Half Hour');
+            data.addColumn('number', 'Hour');
+            data.addColumn('number', 'Minimum');
+        
+            var table = document.getElementById("fees");
+            //Hay que leer la tabla desde el final, ya que es la línea más antigua
+            var iCount = 0;
+            //console.log(table.rows.length);
+            for (var i = table.rows.length - 1, row; row = table.rows[i]; i--) {
+                //console.log("Inicio For");
+                //console.log(i);
+                if (i > 0){
+                    //console.log("Inicio If");
+                    //iterate through rows
+                    //rows would be accessed using the "row" variable assigned in the for loop
+                    //for (var j = 0, col; col = row.cells[j]; j++) {
+                    //iterate through columns
+                    //columns would be accessed using the "col" variable assigned in the for loop
+                    //}  
+                    //console.log(i);
+                    //console.log(row.cells[0].innerText);
+
+                    data.addRows([[iCount,  parseInt(row.cells[0].innerText),  parseInt(row.cells[1].innerText),  parseInt(row.cells[2].innerText),  parseInt(row.cells[3].innerText)]]);
+                    iCount++;
+
+                    //console.log("Fin If");
+                }
+
+            }
+      
+            var options = {
+                hAxis: {
+                    title: 'Time'
+                },
+                vAxis: {
+                    title: 'Sats/vByte'
+                },
+                title: 'Recommended Fees', 
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            var chart = new google.charts.Line(document.getElementById('chart_fees'));
+            //var chart = new google.visualization.LineChart(document.getElementById('chart_fees'));
+
+            //chart.draw(data, options);
+            chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+      </script>       
 {% endblock %}
