@@ -5,46 +5,49 @@
     <h2><label id="time"></label></h2>
     <h3>
         <table>
-            <tr>
-                <th>fastestFee</th>
-                <th>halfHourFee</th>
-                <th>hourFee</th>
-                <th>minimumFee</th>
-            </tr>
         </table>
     </h3>
     <script>
         $(document).ready(function(){
 
-            //var myVar = setInterval(myTimer, 1000);
+            var myVar = setInterval(myTimer, 1000);
 
             var myVar2 = setInterval(function (){
                 $.get('/getFees', function(data){
                     //console.log(data);
                     //console.log(data.length);
 
+                    document.querySelector('table').innerHTML = "";
+
+                    var tableData = "";
+                    tableData += "<tr>";
+                    tableData += "<th>Fastest Fee</th>";
+                    tableData += "<th>Half Hour Fee</th>";
+                    tableData += "<th>Hour Fee</th>";
+                    tableData += "<th>Minimum Fee</th>";
+                    tableData += "<th>Date</th>";
+                    tableData += "</tr>";
+
                     var obj = $.parseJSON(data);
                     //console.log(obj);
-                    console.log(obj.length);
+                    //console.log(obj.length);
                     if (obj.length > 0){
-                        var tableData = "";
+                        
                         for (i = 0; i < obj.length; i++) {
                             var fees = obj[i];
-                            console.log(fees);
+                            //console.log(fees);
                             //console.log(fees["fastestFee"]);
                             tableData += "<tr>";
                             $.each(fees, function(key,value) {
                                 tableData += "<td>" + value + "</td>";
                             })
                             tableData += "</tr>";
-                            
                         }
-                        document.querySelector('table').innerHTML = document.querySelector('table').innerHTML + tableData;
                     }
-
+                    document.querySelector('table').innerHTML = document.querySelector('table').innerHTML + tableData;
 
                 })
-            }, 5000);
+            }, 15000);
  
         });
         function myTimer() {

@@ -4,6 +4,7 @@ import json
 import sqlite3
 import datetime
 import collections
+from dateutil import parser
 
 # Proceso para ejecutar la web app
 # PARECE QUE LO SIGUIENTE NO ES NECESARIO EN VS CODE-->Indicarle a flask en el terminal que el fichero .py es una app de flask. En este caso --> $env:FLASK_APP = "app"
@@ -25,15 +26,18 @@ def getFees():
     addFees(r.text)
 
     # Read fees stored in tables
-    rows= readFees("SELECT fastestFee, halfHourFee, hourFee, minimumFee FROM recomm_fees ORDER BY date_inserted DESC")
+    rows= readFees("SELECT fastestFee, halfHourFee, hourFee, minimumFee, date_inserted FROM recomm_fees ORDER BY date_inserted DESC")
     # Convert query to objects of key-value pairs
     objects_list = []
     for row in rows:
         d = collections.OrderedDict()
+        
         d["fastestFee"] = row[0]
         d["halfHourFee"] = row[1]
         d["hourFee"] = row[2]
         d["minimumFee"] = row[3]
+        d["date_inserted"] = row[4]
+
         objects_list.append(d)
     j = json.dumps(objects_list)
     # print(j)
@@ -58,8 +62,8 @@ def addFees(fees):
         conn.close()
     except:
         print("Error in addFees")
-    finally:
-        print("End addFees")
+    # finally:
+        # print("End addFees")
 
 def readFees(strSQL):
 
