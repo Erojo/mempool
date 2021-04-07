@@ -81,10 +81,8 @@
             var iCount = 0;
             //console.log(table.rows.length);
             for (var i = table.rows.length - 1, row; row = table.rows[i]; i--) {
-                //console.log("Inicio For");
                 //console.log(i);
                 if (i > 0){
-                    //console.log("Inicio If");
                     //iterate through rows
                     //rows would be accessed using the "row" variable assigned in the for loop
                     //for (var j = 0, col; col = row.cells[j]; j++) {
@@ -97,7 +95,6 @@
                     data.addRows([[iCount,  parseInt(row.cells[0].innerText),  parseInt(row.cells[1].innerText),  parseInt(row.cells[2].innerText),  parseInt(row.cells[3].innerText)]]);
                     iCount++;
 
-                    //console.log("Fin If");
                 }
 
             }
